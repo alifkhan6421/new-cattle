@@ -386,6 +386,50 @@ Route::group(
         ->name('milks.printDetails');
 });
 
+
+
+
+Route::group(
+    [
+        'prefix' => 'feeds',
+        'middleware' => ['auth', 'checkPermission']
+    ], function () {
+
+    Route::get('/', 'FeedsController@index')
+        ->name('feeds.index');
+
+    Route::get('/create', 'FeedsController@create')
+        ->name('feeds.create');
+
+    Route::get('/show/{feed}', 'FeedsController@show')
+        ->name('feeds.show')
+        ->where('id', '[0-9]+');
+
+    Route::get('/{feed}/edit', 'FeedsController@edit')
+        ->name('feeds.edit')
+        ->where('id', '[0-9]+');
+
+    Route::post('/', 'FeedsController@store')
+        ->name('feeds.store');
+
+    Route::put('feed/{feed}', 'FeedsController@update')
+        ->name('feeds.update')
+        ->where('id', '[0-9]+');
+
+    Route::delete('/feed/{feed}', 'FeedsController@destroy')
+        ->name('feeds.destroy')
+        ->where('id', '[0-9]+');
+
+    Route::get('/export-xlsx','FeedsController@exportXLSX')
+        ->name('feeds.exportXLSX');
+
+    Route::get('/print-details/{id}','FeedsController@printDetails')
+        ->name('feeds.printDetails');
+});
+
+
+
+
 Route::group(
     [
         'prefix' => 'ledgers',

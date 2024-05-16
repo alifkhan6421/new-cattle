@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\MilkExport;
+use App\Exports\FeedExport;
 use App\Helpers\CommonHelper;
-use App\Models\Milk;
+use App\Models\Feed;
 use App\Models\Cattle;
 use Dompdf\Dompdf;
 use Exception;
@@ -18,10 +18,10 @@ use App\Models\EventLog;
 use App\Helpers\EventHelper;
 use Maatwebsite\Excel\Facades\Excel;
 
-class MilksController extends Controller
+class FeedsController extends Controller
 {
     /**
-     * Display a listing of the milks.
+     * Display a listing of the feeds.
      *
      * @param Request $request
      * @return View | Response
@@ -30,28 +30,24 @@ class MilksController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return $this->milkList($request);
+            return $this->feedList($request);
         }
 
-        $milks = Milk::with('cattle','creator')->get();
+        $feeds = Feed::with('cattle','creator')->get();
         $cattle = Cattle::whereHas('cattleType', function ($q) {
             $q->where('title', 'Cow');
         })->orderBy('id', 'DESC')->pluck('title','id');
-        return view('milks.index', compact('milks', 'cattle'));
+        return view('feeds.index', compact('feeds', 'cattle'));
     }
 
     public function getQuery($request)
     {
-        $query = Milk::query()->with('cattle', 'creator');
+        $query = Feed::query()->with('cattle', 'creator');
         if (!empty($request->startDate) && !empty($request->endDate)) {
             $query->whereBetween('date', [
                 $request->startDate . ' 00:00:00',
                 $request->endDate . ' 23:59:59'
             ]);
-        }
-
-        if (!empty($request->type)) {
-            $query->where('type', $request->type);
         }
 
         if (!empty($request->cattleId)) {
@@ -95,18 +91,18 @@ class MilksController extends Controller
      * @return Response
      * @throws Exception
      */
-    public function milkList($request)
+    public function feedList($request)
     {
         return datatables()->of($this->getQuery($request))
             ->addIndexColumn()
-            ->addColumn('action', function ($milk) {
-                return view('milks.action', compact('milk'));
+            ->addColumn('action', function ($feed) {
+                return view('feeds.action', compact('feed'));
             })
-            ->editColumn('cattle', function ($milk) {
-                return optional($milk->cattle)->title;
+            ->editColumn('cattle', function ($feed) {
+                return optional($feed->cattle)->title;
             })
-            ->editColumn('created_by', function ($milk) {
-                return optional($milk->creator)->name;
+            ->editColumn('created_by', function ($feed) {
+                return optional($feed->creator)->name;
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -115,21 +111,21 @@ class MilksController extends Controller
     public function exportXLSX(Request $request)
     {
         return Excel::download(
-            new MilkExport($this->getQuery($request)),
-            'milk-' . time() . '.xlsx'
+            new FeedExport($this->getQuery($request)),
+            'feed-' . time() . '.xlsx'
         );
     }
 
     public function printDetails($id)
     {
         set_time_limit(300);
-        $milk = Milk::with('cattle','creator')->findOrFail($id);
-        $view = view('milks.print_details', compact('milk'));
-        CommonHelper::generatePdf($view->render(), 'Milk-details-' . date('Ymd'));
+        $feed = Feed::with('cattle','creator')->findOrFail($id);
+        $view = view('feeds.print_details', compact('feed'));
+        CommonHelper::generatePdf($view->render(), 'Feed-details-' . date('Ymd'));
     }
 
     /**
-     * Show the form for creating a new milk.
+     * Show the form for creating a new feed.
      *
      * @return View
      */
@@ -138,11 +134,11 @@ class MilksController extends Controller
         $cattle = Cattle::whereHas('cattleType', function ($q) {
             $q->where('title', 'Cow');
         })->orderBy('id', 'DESC')->pluck('title','id');
-        return view('milks.create', compact('cattle'));
+        return view('feeds.create', compact('cattle'));
     }
 
     /**
-     * Store a new milk in the storage.
+     * Store a new feed in the storage.
      *
      * @param Request $request
      * @return RedirectResponse | Redirector
@@ -152,18 +148,18 @@ class MilksController extends Controller
         $data = $this->getData($request);
         try {
             $data['created_by'] = Auth::user()->id;
-            Milk::create($data);
+            Feed::create($data);
 
             if (config('settings.IS_EVENT_LOGS_ENABLE')) {
                 EventLog::create([
                     'user_id' => Auth::user()->id,
-                    'end_point' => 'milks.create',
+                    'end_point' => 'feeds.create',
                     'changes' => EventHelper::logForCreate($data)
                 ]);
             }
 
-            return redirect()->route('milks.index')
-                             ->with('success_message', __('message.milk_was_successfully_added'));
+            return redirect()->route('feeds.index')
+                             ->with('success_message', __('message.feed_was_successfully_added'));
         } catch (Exception $exception) {
             return back()->withInput()
                          ->withErrors(['unexpected_error' => $exception->getMessage()]);
@@ -171,32 +167,32 @@ class MilksController extends Controller
     }
 
     /**
-     * Display the specified milk.
+     * Display the specified feed.
      *
      * @param int $id
      * @return View
      */
     public function show($id)
     {
-        $milk = Milk::with('cattle','creator')->findOrFail($id);
-        return view('milks.show', compact('milk'));
+        $feed = Feed::with('cattle','creator')->findOrFail($id);
+        return view('feeds.show', compact('feed'));
     }
 
     /**
-     * Show the form for editing the specified milk.
+     * Show the form for editing the specified feed.
      *
      * @param int $id
      * @return View
      */
     public function edit($id)
     {
-        $milk = Milk::findOrFail($id);
+        $feed = Feed::findOrFail($id);
         $cattle = Cattle::all()->pluck('title','id');
-        return view('milks.edit', compact('milk','cattle'));
+        return view('feeds.edit', compact('feed','cattle'));
     }
 
     /**
-     * Update the specified milk in the storage.
+     * Update the specified feed in the storage.
      *
      * @param  int $id
      * @param Request $request
@@ -206,20 +202,20 @@ class MilksController extends Controller
     {
         $data = $this->getData($request);
         try {
-            $milk = Milk::findOrFail($id);
-            $oldData = $milk->toArray();
-            $milk->update($data);
+            $feed = Feed::findOrFail($id);
+            $oldData = $feed->toArray();
+            $feed->update($data);
 
             if (config('settings.IS_EVENT_LOGS_ENABLE')) {
                 EventLog::create([
                     'user_id' => Auth::user()->id,
-                    'end_point' => 'milks.update',
+                    'end_point' => 'feeds.update',
                     'changes' => EventHelper::logForUpdate($oldData, $data)
                 ]);
             }
 
-            return redirect()->route('milks.index')
-                             ->with('success_message', __('message.milk_was_successfully_updated'));
+            return redirect()->route('feeds.index')
+                             ->with('success_message', __('message.feed_was_successfully_updated'));
         } catch (Exception $exception) {
             return back()->withInput()
                          ->withErrors(['unexpected_error' =>  $exception->getMessage()]);
@@ -227,7 +223,7 @@ class MilksController extends Controller
     }
 
     /**
-     * Remove the specified milk from the storage.
+     * Remove the specified feed from the storage.
      *
      * @param  int $id
      * @return RedirectResponse | Redirector
@@ -236,20 +232,20 @@ class MilksController extends Controller
     public function destroy($id)
     {
         try {
-            $milk = Milk::findOrFail($id);
-            $oldData = $milk->toArray();
-            $milk->delete();
+            $feed = Feed::findOrFail($id);
+            $oldData = $feed->toArray();
+            $feed->delete();
 
             if (config('settings.IS_EVENT_LOGS_ENABLE')) {
                 EventLog::create([
                     'user_id' => Auth::user()->id,
-                    'end_point' => 'milks.destroy',
+                    'end_point' => 'feeds.destroy',
                     'changes' => EventHelper::logForDelete($oldData)
                 ]);
             }
 
-            return redirect()->route('milks.index')
-                             ->with('success_message', __('message.milk_was_successfully_deleted'));
+            return redirect()->route('feeds.index')
+                             ->with('success_message', __('message.feed_was_successfully_deleted'));
         } catch (Exception $exception) {
             return back()->withInput()
                          ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request!']);
@@ -266,8 +262,7 @@ class MilksController extends Controller
     {
         $data = $request->validate([
             'cattle_id' => 'required',
-            'type' => 'required',
-            'date' => 'nullable|date',
+            'date' => 'required|date',
             'morning_amount' => 'required|numeric|min:-2147483648|max:2147483647',
             'noon_amount' => 'required|numeric|min:-2147483648|max:2147483647',
             'after_noon_amount' => 'required|numeric|min:-2147483648|max:2147483647',

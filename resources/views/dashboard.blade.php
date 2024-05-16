@@ -70,7 +70,7 @@
 
     <div class="row equal padding-bottom-15">
         @if (App\Helpers\CommonHelper::isCapable('dashboard.reportIncomeExpenseChart'))
-            <div class="col-md-7">
+            <div class="col-md-4">
                 <!-- BAR CHART -->
                 <div class="box box-success h-100">
                     <div class="box-header with-border">
@@ -96,7 +96,36 @@
             </div>
         @endif
 
-        <div class="col-md-5">
+
+
+
+
+        <div class="col-md-4">
+            <!-- BAR CHART -->
+            <div class="box box-success h-100">
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{__('info.monthly_Milk_report')}}</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="chart">
+                        <canvas id="barChartss" class="h-280"></canvas>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+
+        <div class="col-md-4">
             <div class="box box-default h-100">
 
                 <div class="box-header with-border">
@@ -269,6 +298,11 @@
         let monthlyExpenses = [{{ $monthlyExpenses }}];
         let pieChartData = JSON.parse('{!! $pieChart !!}');
     </script>
+
+<script>
+    let barChartLabelss = [{!! $barChartLabelss !!}];
+    let monthlyMilk = [{{ $monthlyMilk }}];
+</script>
     <script src="{{ asset('chart.js/Chart.js') }}"></script>
     <script src="{{ asset('js/dashboard.js') }}"></script>
 @endsection

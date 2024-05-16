@@ -5,9 +5,9 @@
 @endsection
 
 @section('content-header')
-    <h1>{{__('milk.milks')}}</h1>
+    <h1>{{__('feed.feeds')}}</h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> {{__('milk.milks')}}</a></li>
+        <li><a href="#"><i class="fa fa-dashboard"></i> {{__('feed.feeds')}}</a></li>
         <li class="active">{{__('commons.listing')}}</li>
     </ol>
 @endsection
@@ -34,13 +34,13 @@
                 <button type="button" class="btn btn-sm btn-default" data-widget="collapse">
                     <i class="fa fa-expand"></i>
                 </button>
-                <a href="{{ route('milks.index') }}" class="btn btn-info btn-sm">
+                <a href="{{ route('feeds.index') }}" class="btn btn-info btn-sm">
                     <i class="fa fa-refresh"></i> {{__('commons.reset')}}
                 </a>
-                @if (App\Helpers\CommonHelper::isCapable('milks.create'))
-                    <a href="{{ route('milks.create') }}"
+                @if (App\Helpers\CommonHelper::isCapable('feeds.create'))
+                    <a href="{{ route('feeds.create') }}"
                        class="btn btn-sm btn-success"
-                       title="{{__('buttonTitle.create_new_milk')}}">
+                       title="{{__('buttonTitle.create_new_feed')}}">
                         <i class="fa fa-plus"></i> {{__('commons.create')}}
                     </a>
                 @endif
@@ -79,7 +79,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="morning_amount" class="control-label col-lg-2">{{__('milk.morning_amount')}}</label>
+                            <label for="morning_amount" class="control-label col-lg-2">{{__('feed.morning_amount')}}</label>
                             <div class="col-lg-4">
                                 <div class="input-group">
                                     <input name="morning_amount" id="morning_amount" class="form-control">
@@ -95,7 +95,7 @@
                                 </div>
                             </div>
 
-                            <label for="noon_amount" class="control-label col-lg-2">{{__('milk.noon_amount')}}</label>
+                            <label for="noon_amount" class="control-label col-lg-2">{{__('feed.noon_amount')}}</label>
                             <div class="col-lg-4">
                                 <div class="input-group">
                                     <input name="noon_amount" id="noon_amount" class="form-control">
@@ -113,7 +113,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="after_noon_amount" class="control-label col-lg-2">{{__('milk.after_noon_amount')}}</label>
+                            <label for="after_noon_amount" class="control-label col-lg-2">{{__('feed.after_noon_amount')}}</label>
                             <div class="col-lg-4">
                                 <div class="input-group">
                                     <input name="after_noon_amount" id="after_noon_amount" class="form-control">
@@ -154,9 +154,9 @@
                                 <th>{{__('commons.sl')}}</th>
                                 <th>{{__('commons.cow')}}</th>
                                 <th>{{__('commons.date')}}</th>
-                                <th class="text-right">{{__('milk.morning_amount')}}  (Liter)</th>
-                                <th class="text-right">{{__('milk.noon_amount')}}  (Liter)</th>
-                                <th class="text-right">{{__('milk.after_noon_amount')}}  (Liter)</th>
+                                <th class="text-right">{{__('feed.morning_amount')}} (Kg)</th>
+                                <th class="text-right">{{__('feed.noon_amount')}} (Kg)</th>
+                                <th class="text-right">{{__('feed.after_noon_amount')}} (Kg)</th>
                                 <th>{{__('commons.created_by')}}</th>
                                 <th class="text-center mw-100">{{__('commons.action')}}</th>
                             </tr>
@@ -215,7 +215,7 @@
                     $('.dataTables_filter').append(`{!! view('commons.button') !!}`);
 
                     $('#btnExportXLSX').on('click',function () {
-                        location.href = '{{ route('milks.exportXLSX') }}' + dataTableUrl;
+                        location.href = '{{ route('feeds.exportXLSX') }}' + dataTableUrl;
                     });
                 }
             });
@@ -272,7 +272,7 @@
 
             let ajaxRequest = function () {
                 dataTableUrl = getUrlQueries();
-                dataTable.ajax.url('{{ route('milks.index') }}' + dataTableUrl);
+                dataTable.ajax.url('{{ route('feeds.index') }}' + dataTableUrl);
                 dataTable.draw();
             };
 

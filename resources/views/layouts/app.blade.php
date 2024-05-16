@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('settings.SITE_NAME', 'Admin - Cattle Master') }}</title>
+    <title>Cattle Management Sytem</title>
 
     <!-- Common Styles -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -16,7 +16,7 @@
 @yield('css')
 
 <!-- Favicon icon -->
-    <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
 
     <script>
         let dateFormat = '{{ \App\Helpers\CommonHelper::getJsDisplayDateFormat() }}';
@@ -39,7 +39,7 @@
             <span class="logo-lg pull-left">
                 <img src="{{ asset('storage/sites/' . config('settings.SITE_LOGO')) }}" alt="Site Logo"
                 class="logo-img">
-                <b>Admin</b>{{ config('settings.SITE_SHORT_NAME') }}
+                <b>{{ config('settings.SITE_NAME') }}</b>
             </span>
         </a>
 
@@ -171,6 +171,14 @@
                     <li {{ (Request::is('milks*') ? 'class=active' : '') }}>
                         <a href="{{ url('/milks') }}">
                             <i class="fa fa-flask"></i> <span>{{__('info.milks')}}</span>
+                        </a>
+                    </li>
+                @endif
+
+                @if (App\Helpers\CommonHelper::isCapable('feeds.index'))
+                    <li {{ (Request::is('feeds*') ? 'class=active' : '') }}>
+                        <a href="{{ url('/feeds') }}">
+                            <i class="fa fa-flask"></i> <span>{{__('info.feeds')}}</span>
                         </a>
                     </li>
                 @endif

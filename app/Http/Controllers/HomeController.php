@@ -109,6 +109,59 @@ class HomeController extends Controller
         $data['monthlyIncomes'] = implode(',', $monthlyIncomes);
         $data['monthlyExpenses'] = implode(',', $monthlyExpenses);
 
+
+
+
+        
+        // Bar chart data
+        $barChartLabels = '';
+        $monthlyIncomess = [];
+        $monthlyExpensess = [];
+        for ($is = 5; $is > -1; $is--) {
+            if ($barChartLabels) {
+                $barChartLabels .= ',';
+            }
+            $barChartLabels .= '"' . date('F', strtotime("-$is month")) . '"';
+
+            $months = date('Y-m', strtotime("-$is month"));
+            $monthlyIncomess[] = Ledger::where('type', 'Income')
+                ->where('date', 'like', '%' . $months . '%')
+                ->sum('amount');
+
+            $monthlyExpenses[] = Ledger::where('type', 'Expense')
+                ->where('date', 'like', '%' . $months . '%')
+                ->sum('amount');
+        }
+
+        $data['barChartLabels'] = $barChartLabels;
+        $data['monthlyIncomess'] = implode(',', $monthlyIncomess);
+        $data['monthlyExpensess'] = implode(',', $monthlyExpensess);
+
+
+
+        // Bar chart data
+        $barChartLabelss = '';
+        $monthlyMilk = [];
+        for ($is = 5; $is > -1; $is--) {
+            if ($barChartLabelss) {
+                $barChartLabelss .= ',';
+            }
+            $barChartLabelss .= '"' . date('F', strtotime("-$is month")) . '"';
+
+            $months = date('Y-m', strtotime("-$is month"));
+            $monthlyMilk[] = Milk::where('type', 'Normal')
+                ->where('date', 'like', '%' . $months . '%')
+                ->sum(DB::raw('noon_amount + morning_amount + after_noon_amount'));
+
+        }
+
+        $data['barChartLabelss'] = $barChartLabelss;
+        $data['monthlyMilk'] = implode(',', $monthlyMilk);
+
+
+
+
+
         // Pie chart data
         $cnt = 0;
         $pieChart = [];

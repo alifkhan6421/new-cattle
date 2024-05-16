@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Milk extends Model
+class Feed extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'milks';
+    protected $table = 'Feeds';
 
     /**
     * The database primary key value.
@@ -27,7 +27,6 @@ class Milk extends Model
      */
     protected $fillable = [
                   'cattle_id',
-                  'type',
                   'date',
                   'morning_amount',
                   'noon_amount',
@@ -74,7 +73,7 @@ class Milk extends Model
      */
     public function setDateAttribute($value)
     {
-        $this->attributes['date'] = !empty($value) ? date($this->getDateFormat(), strtotime($value)) : date($this->getDateFormat());
+        $this->attributes['date'] = !empty($value) ? date($this->getDateFormat(), strtotime($value)) : null;
     }
 
     /**

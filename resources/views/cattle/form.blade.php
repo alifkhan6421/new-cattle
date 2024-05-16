@@ -63,7 +63,7 @@
             <label for="purchase_source">{{__('cattle.purchase_source')}}</label>
             <input class="form-control" name="purchase_source" type="text" id="purchase_source"
                    value="{{ old('purchase_source', optional($cattle)->purchase_source) }}" minlength="1"
-                   maxlength="255" required>
+                   maxlength="255" >
             {!! $errors->first('purchase_source', '<p class="help-block">:message</p>') !!}
         </div>
     </div>
@@ -73,7 +73,7 @@
             <label for="purchase_amount">{{__('cattle.purchase_amount')}}</label>
             <input class="form-control" name="purchase_amount" type="number" id="purchase_amount"
                    value="{{ old('purchase_amount', optional($cattle)->purchase_amount) }}" min="-2147483648"
-                   max="2147483647" required>
+                   max="2147483647" >
             {!! $errors->first('purchase_amount', '<p class="help-block">:message</p>') !!}
         </div>
     </div>
@@ -89,7 +89,7 @@
                 </div>
                 <input class="form-control datepicker pull-right" name="purchase_date"
                        id="purchase_date" value="{{ old('purchase_date', optional($cattle)->purchase_date) }}"
-                       placeholder="format: {{ config('constants.DISPLAY_DATE_FORMAT') }}" required>
+                       placeholder="format: {{ config('constants.DISPLAY_DATE_FORMAT') }}" >
             </div>
 
             {!! $errors->first('purchase_date', '<p class="help-block">:message</p>') !!}
@@ -106,7 +106,7 @@
                 </div>
                 <input class="form-control datepicker pull-right" name="farm_entry_date" id="farm_entry_date"
                        value="{{ old('farm_entry_date', optional($cattle)->farm_entry_date) }}"
-                       placeholder="format: {{ config('constants.DISPLAY_DATE_FORMAT') }}" required>
+                       placeholder="format: {{ config('constants.DISPLAY_DATE_FORMAT') }}" >
             </div>
 
             {!! $errors->first('farm_entry_date', '<p class="help-block">:message</p>') !!}
@@ -184,7 +184,7 @@
         <div class="form-group {{ $errors->has('species') ? 'has-error' : '' }}">
             <label for="species">{{__('cattle.species')}}</label>
             <input class="form-control" name="species" type="text" id="species"
-                   value="{{ old('species', optional($cattle)->species) }}" minlength="1" maxlength="100" required>
+                   value="{{ old('species', optional($cattle)->species) }}" minlength="1" maxlength="100" >
             {!! $errors->first('species', '<p class="help-block">:message</p>') !!}
         </div>
     </div>
@@ -200,7 +200,7 @@
                 </div>
                 <input class="form-control datepicker pull-right" name="date_of_birth" id="date_of_birth"
                        value="{{ old('date_of_birth', optional($cattle)->date_of_birth) }}"
-                       placeholder="format: {{ config('constants.DISPLAY_DATE_FORMAT') }}" required>
+                       placeholder="format: {{ config('constants.DISPLAY_DATE_FORMAT') }}" >
             </div>
 
             {!! $errors->first('date_of_birth', '<p class="help-block">:message</p>') !!}
@@ -211,7 +211,7 @@
         <div class="form-group {{ $errors->has('teeth') ? 'has-error' : '' }}">
             <label for="teeth">{{__('cattle.teeth')}}</label>
             <input class="form-control" name="teeth" type="number" id="teeth"
-                   value="{{ old('teeth', optional($cattle)->teeth) }}" min="-2147483648" max="2147483647" required>
+                   value="{{ old('teeth', optional($cattle)->teeth) }}" min="-2147483648" max="2147483647" >
             {!! $errors->first('teeth', '<p class="help-block">:message</p>') !!}
         </div>
     </div>
@@ -222,7 +222,7 @@
             <label for="expected_sale_price">{{__('cattle.expected_sale_price')}}</label>
             <input class="form-control" name="expected_sale_price" type="number" id="expected_sale_price"
                    value="{{ old('expected_sale_price', optional($cattle)->expected_sale_price) }}" min="-2147483648"
-                   max="2147483647" required>
+                   max="2147483647" >
             {!! $errors->first('expected_sale_price', '<p class="help-block">:message</p>') !!}
         </div>
     </div>
@@ -232,7 +232,7 @@
             <label for="daily_expense">{{__('cattle.daily_expense')}}</label>
             <input class="form-control" name="daily_expense" type="number" id="daily_expense"
                    value="{{ old('daily_expense', optional($cattle)->daily_expense) }}" min="-2147483648"
-                   max="2147483647" required>
+                   max="2147483647" >
             {!! $errors->first('daily_expense', '<p class="help-block">:message</p>') !!}
         </div>
     </div>
@@ -241,7 +241,7 @@
     <div class="col-md-6">
         <div class="form-group {{ $errors->has('birth_type') ? 'has-error' : '' }}">
             <label for="birth_type">{{__('cattle.birth_type')}}</label>
-            <select class="form-control  select-admin-lte" id="birth_type" name="birth_type" required>
+            <select class="form-control  select-admin-lte" id="birth_type" name="birth_type" >
                 <option value="">-----{{__('commons.select')}}-----</option>
                 @foreach (['Prematured' => 'Prematured', 'Well' => 'Well'] as $key => $text)
                     <option
@@ -257,7 +257,7 @@
     <div class="col-md-6">
         <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
             <label for="status">{{__('commons.status')}}</label>
-            <select class="form-control  select-admin-lte" id="status" name="status" required>
+            <select class="form-control  select-admin-lte" id="status" name="status" >
                 <option value="">-----{{__('commons.select')}}-----</option>
                 @foreach (['Active' => 'Active', 'Sold' => 'Sold', 'Died' => 'Died'] as $key => $text)
                     <option
