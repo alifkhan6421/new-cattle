@@ -8,9 +8,9 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.1.10",
         "ext-json": "*",
-        "dompdf/dompdf": "^0.8.5",
+        "dompdf/dompdf": "^2.0.7",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "gghughunishvili/entrust": "^4.0",
